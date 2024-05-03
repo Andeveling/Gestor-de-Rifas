@@ -1,3 +1,4 @@
+"use client";
 import Modal from "@/components/shared/modal";
 import { useState, Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { ClientsFrom } from "./clients-form";

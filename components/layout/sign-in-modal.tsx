@@ -22,25 +22,26 @@ const SignInModal = ({
   return (
     <Modal showModal={showSignInModal} setShowModal={setShowSignInModal}>
       <div className="w-full overflow-hidden shadow-xl md:max-w-md md:rounded-2xl md:border md:border-gray-200">
-        <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
+        <div className="flex flex-col items-center justify-center px-4 py-6 pt-8 space-y-3 text-center bg-white border-b border-gray-200 md:px-16">
           <a href="https://precedent.dev">
             <Image
               src="/logo.png"
               alt="Logo"
-              className="h-10 w-10 rounded-full"
+              className="w-10 h-10 rounded-full"
               width={20}
               height={20}
             />
           </a>
-          <h3 className="font-display text-2xl font-bold">Sign In</h3>
+          <h3 className="text-2xl font-bold font-display">Sign In</h3>
           <p className="text-sm text-gray-500">
             This is strictly for demo purposes - only your email and profile
             picture will be stored.
           </p>
         </div>
 
-        <div className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 md:px-16">
+        <div className="flex flex-col px-4 py-8 space-y-4 bg-primary md:px-16">
           <button
+            type="button"
             disabled={signInClicked}
             className={`${
               signInClicked
@@ -56,7 +57,7 @@ const SignInModal = ({
               <LoadingDots color="#808080" />
             ) : (
               <>
-                <Google className="h-5 w-5" />
+                <Google className="w-5 h-5" />
                 <p>Sign In with Google</p>
               </>
             )}

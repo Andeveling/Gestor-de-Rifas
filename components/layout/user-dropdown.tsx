@@ -1,12 +1,12 @@
 "use client";
 
 import Popover from "@/components/shared/popover";
-import { LogOut, Users, BookOpen } from "lucide-react";
+import { BookOpen, LogOut, Users } from "lucide-react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 export default function UserDropdown({ session }: { session: Session }) {
   const { email, image } = session?.user || {};
@@ -26,12 +26,12 @@ export default function UserDropdown({ session }: { session: Session }) {
               <p className="text-sm truncate">{session?.user?.email}</p>
             </div>
 
-            <ButtonNavLink icon={<Users className="w-4 h-4" />} text="Clientes" href="/clients" />
-            <ButtonNavLink icon={<BookOpen className="w-4 h-4" />} text="Rifas" href="/raffles" />
+            <ButtonNavLink icon={<Users className="w-4 h-4" />} text="Clientes" href="/clients" setPopover={setOpenPopover}/>
+            <ButtonNavLink icon={<BookOpen className="w-4 h-4" />} text="Rifas" href="/raffles" setPopover={setOpenPopover} />
 
             <button
               type="button"
-              className="relative flex items-center justify-start w-full p-2 space-x-2 text-sm text-left transition-all duration-75 rounded-md hover:bg-gray-100"
+              className="relative flex items-center justify-start w-full p-2 space-x-2 text-sm text-left transition-all duration-75 rounded-md hover:bg-primary active:bg-primary-focus"
               onClick={() => signOut()}
             >
               <LogOut className="w-4 h-4" />
@@ -59,9 +59,23 @@ export default function UserDropdown({ session }: { session: Session }) {
   );
 }
 
-const ButtonNavLink = ({ icon, text,href }: { icon: ReactNode; text: string, href: string }) => {
+const ButtonNavLink = ({
+  icon,
+  text,
+  href,
+  setPopover,
+}: {
+  icon: ReactNode;
+  text: string;
+  href: string;
+  setPopover: Dispatch<SetStateAction<boolean>>;
+}) => {
   return (
-    <Link href={href} className="relative flex items-center justify-start w-full p-2 space-x-2 text-sm text-left transition-all duration-75 rounded-md cursor-not-allowed hover:bg-gray-100">
+    <Link
+      href={href}
+      className="relative flex items-center justify-start w-full p-2 space-x-2 text-sm text-left transition-all duration-75 rounded-md cursor-not-allowed active:bg-primary-focus hover:bg-primary"
+      onClick={() => setPopover(false)}
+    >
       {icon}
       <p className="text-sm">{text}</p>
     </Link>

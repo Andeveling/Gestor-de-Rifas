@@ -1,30 +1,38 @@
 "use client";
-import { CreateClientSchema, ICreateClientDTO } from "@/types";
+import { createClient } from "@/services/clients.service";
+import { CreateClientSchema, TCreateClient } from "@/types/client.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
+import { useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { mutate } from "swr";
 
-export const ClientsFrom = ({setShowModal}: {setShowModal: Dispatch<SetStateAction<boolean>>}) => {
+export const ClientsFrom = ({ setShowModal }: { setShowModal: Dispatch<SetStateAction<boolean>> }) => {
+     const searchParams = useSearchParams();
   const {
     register,
     handleSubmit,
     watch,
     reset,
     formState: { errors, isValid, isDirty, touchedFields },
-  } = useForm<ICreateClientDTO>({
+  } = useForm<TCreateClient>({
     resolver: zodResolver(CreateClientSchema),
     mode: "onChange",
   });
+  const onSubmit: SubmitHandler<TCreateClient> = async (data) => {
+    setShowModal(false);
+    try {
+      await createClient(data);
+      mutate((key)=> typeof key === "string" && key.startsWith("/api/clients") ? key : null);
 
-  // TODO: use useSWR to get data
-  const onSubmit: SubmitHandler<ICreateClientDTO> = (data) => {
-      console.log(data)
       toast.success(`Se agrego el nuevo cliente: ${data.name}`);
-      setShowModal(false);
-    //   TODO: save data
-    reset();
+    } catch (error) {
+      toast.error("No se pudo crear el cliente");
+    } finally {
+      reset();
+    }
   };
 
   return (

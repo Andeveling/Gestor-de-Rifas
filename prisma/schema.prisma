@@ -87,6 +87,7 @@ model Ticket {
   status String @default("FREE")
 }
 
+// FREE
 // PENDING
-// PENDING
+// PAID
 // PARTIALLY_PAID

@@ -1,4 +1,3 @@
-import {  z, ZodType } from "zod"; // Add new import
 
 export interface IClient {
   id: string;
@@ -27,9 +26,5 @@ export interface IRaffle {
   tickets: Array<ITicket>;
 }
 
-export const CreateClientSchema: ZodType<ICreateClientDTO> = z.object({
-  name: z.string().min(3).max(50),
-  cellphone: z.string().regex(/^\d{10}$/).min(10).max(10),
-  cc: z.string().regex(/^[0-9]*$/).min(6),
-  address: z.string().optional(),
-});
+
+
