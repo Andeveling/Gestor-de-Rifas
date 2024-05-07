@@ -66,25 +66,32 @@ model Client {
   cellphone String
   code      String?
   tickets   Ticket[]
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
 }
 
 model Raffle {
-  id          String   @id @default(cuid())
-  name        String
+  id             String   @id @default(cuid())
+  name           String
   priceForTicket Int
-  playDate DateTime
-  description String?
-  tikets      Ticket[] 
+  playDate       DateTime
+  description    String?
+  tickets         Ticket[]
+  createAt       DateTime @default(now())
+  updateAt       DateTime @updatedAt
+  isActive       Boolean  @default(true)
 }
 
 model Ticket {
-  id       String  @id @default(cuid())
+  id       String   @id @default(cuid())
   number   String
   raffleId String
-  raffle   Raffle  @relation(fields: [raffleId], references: [id])
+  raffle   Raffle   @relation(fields: [raffleId], references: [id])
   clientId String?
   client   Client?  @relation(fields: [clientId], references: [id])
-  status String @default("FREE")
+  status   String   @default("FREE")
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 }
 
 // FREE

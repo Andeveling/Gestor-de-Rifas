@@ -16,7 +16,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="forest">
+    <html lang="es" data-theme="forest" suppressHydrationWarning>
       <body className={cx(sfPro.variable, inter.variable)}>
         <Toaster position="top-center" />
         <Suspense fallback="...">

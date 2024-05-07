@@ -1,8 +1,7 @@
-import { CreateClientSchema, DeleteClientSchema, TCreateClient, UpdateClientSchema } from "@/types/client.types";
-import { PrismaClient } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+import { DeleteClientSchema } from "@/types/client.types";
+import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const validateFields = DeleteClientSchema.safeParse({ id: params.id });

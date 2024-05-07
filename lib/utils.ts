@@ -85,3 +85,16 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   // another ellipsis, and the last page.
   return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
 };
+
+export const currencyFormat = (value: number | string) => {
+  if (!value) return 0;
+  const number = parseFloat(value.toString());
+  if (isNaN(number)) return 0;
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+
+  }).format(number);
+}

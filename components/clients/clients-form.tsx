@@ -3,14 +3,12 @@ import { createClient } from "@/services/clients.service";
 import { CreateClientSchema, TCreateClient } from "@/types/client.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
-import { useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { mutate } from "swr";
 
 export const ClientsFrom = ({ setShowModal }: { setShowModal: Dispatch<SetStateAction<boolean>> }) => {
-     const searchParams = useSearchParams();
   const {
     register,
     handleSubmit,
@@ -25,8 +23,7 @@ export const ClientsFrom = ({ setShowModal }: { setShowModal: Dispatch<SetStateA
     setShowModal(false);
     try {
       await createClient(data);
-      mutate((key)=> typeof key === "string" && key.startsWith("/api/clients") ? key : null);
-
+      mutate((key:string)=> typeof key === "string" && key.startsWith("/api/clients") ? key : null);
       toast.success(`Se agrego el nuevo cliente: ${data.name}`);
     } catch (error) {
       toast.error("No se pudo crear el cliente");
