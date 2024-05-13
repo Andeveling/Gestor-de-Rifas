@@ -1,7 +1,7 @@
 "use client";
 import Modal from "@/components/shared/modal";
 import { useState, Dispatch, SetStateAction, useCallback, useMemo } from "react";
-import { ClientsFrom } from "./clients-form";
+import { ClientsForm } from "./clients-form";
 const ClientsModal = ({
   showModal,
   setShowModal,
@@ -9,9 +9,11 @@ const ClientsModal = ({
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
 }) => {
-    return <Modal showModal={showModal} setShowModal={setShowModal} >
-      <ClientsFrom setShowModal={setShowModal}/>
-  </Modal>
+    return (
+      <Modal showModal={showModal} setShowModal={setShowModal}>
+        <ClientsForm setShowModal={setShowModal} />
+      </Modal>
+    );
 };
 
 export const useClientModal = () => {

@@ -1,25 +1,11 @@
-"use client";
-import { RaffleList } from '@/components/raffles/raffle-list';
-import { useRaffleModal } from '@/components/raffles/raffles-modal';
-import { ModalButton } from '@/components/shared/modal-button';
-import { fetcher } from '@/lib/fetcher';
-import { TRaffle } from '@/types/raffles.types';
-import { PlusCircle } from 'lucide-react';
-import useSWR from 'swr';
+import RaffleList from "@/components/raffles/raffle-list";
+import { PlusCircle } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
 
-type TRaffleData = {
-  raffles: TRaffle[];
-  totalRaffles: number;
-}
-
-export default function RafflesPage() {
-  const { data, error, isLoading } = useSWR<TRaffleData>("/api/raffles", fetcher);
-  const { RaffleModal, setShowRaffleModal } = useRaffleModal();
-  if (error) return <div>Failed to load</div>;
-  if (isLoading) return <div>Loading...</div>;
+export default async function RafflesPage() {
   return (
     <section className="flex flex-col w-full gap-2 px-4">
-      <RaffleModal />
       <div className="justify-between navbar bg-base-100">
         <div className="flex flex-col justify-start text-left">
           <div>
@@ -27,17 +13,17 @@ export default function RafflesPage() {
           </div>
         </div>
         <div className="navbar-end">
-          <ModalButton text='Nueva Rifa' setShowModal={setShowRaffleModal} />
+          <Link href="/raffles/create" className="btn btn-primary">
+            <PlusCircle className="w-6 h-6 " />
+            <span>Nueva Rifa</span>
+          </Link>
         </div>
       </div>
-
-      {/* <Search placeholder="Buscar rifa" /> */}
       <div className="flex flex-col w-full">
-        <RaffleList raffles={data?.raffles as TRaffle[]} totalRaffles={data?.totalRaffles as number} />
+        <Suspense fallback={<span className="loading loading-bars loading-lg"></span>}>
+          <RaffleList />
+        </Suspense>
       </div>
-
-     
     </section>
   );
 }
-

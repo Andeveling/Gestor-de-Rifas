@@ -13,7 +13,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: "Client not found" });
     }
 
-    const client = await prisma.client.findUnique({ where: { id: params.id } });
+    const client = await prisma.client.findUnique({ where: { id: params.id }, include: { tickets: true } });
     if (!client) {
       return NextResponse.json({ error: "Client not found" });
     }

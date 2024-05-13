@@ -37,7 +37,6 @@ export default function ClientsPage({
         <div className="flex flex-col justify-start text-left">
           <div>
             <h1 className="text-2xl font-bold ">Clientes</h1>
-          
           </div>
         </div>
         <div className="navbar-end">
@@ -48,13 +47,12 @@ export default function ClientsPage({
         </div>
       </div>
 
-      {/* <Search placeholder="Buscar cliente" /> */}
+      <Search placeholder="Buscar cliente" />
       <div className="flex flex-col w-full">
-        
-        <ClientList clients={data?.clients as TClient[]} totalClients={data?.totalClients as number}  />
+        <ClientList clients={data?.clients as TClient[]} totalClients={data?.totalClients as number} />
       </div>
 
-      {data?.totalPages && <Pagination totalPages={data?.totalPages as number} />}
+      {data?.totalPages && data?.totalPages > 1 && <Pagination totalPages={data?.totalPages as number} />}
     </section>
   );
 }

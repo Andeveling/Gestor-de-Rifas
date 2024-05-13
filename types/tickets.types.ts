@@ -18,8 +18,8 @@ export const TicketSchema = z.object({
     }, {
         message: "El numero debe ser de 4 cifras",
     }),
-    raffle: RaffleSchema.shape.id,
-    client: z.object(ClientSchema.shape).nullable().optional(),
+    raffle: z.string(),
+    client: z.array(z.lazy(() => ClientSchema.shape.id)).nullable().optional(),
     status: z.enum([TicketStatus.FREE, TicketStatus.PENDING, TicketStatus.PAID, TicketStatus.PARTIALLY_PAID]).default(TicketStatus.FREE),
 });
 

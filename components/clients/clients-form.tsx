@@ -8,7 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { mutate } from "swr";
 
-export const ClientsFrom = ({ setShowModal }: { setShowModal: Dispatch<SetStateAction<boolean>> }) => {
+export const ClientsForm = ({ setShowModal }: { setShowModal: Dispatch<SetStateAction<boolean>> }) => {
   const {
     register,
     handleSubmit,
@@ -22,11 +22,12 @@ export const ClientsFrom = ({ setShowModal }: { setShowModal: Dispatch<SetStateA
   const onSubmit: SubmitHandler<TCreateClient> = async (data) => {
     setShowModal(false);
     try {
-      await createClient(data);
+      const newClient = await createClient(data);
+      if (!newClient) throw new Error(`No se pudo crear el cliente: ${data.name}`);
       mutate((key:string)=> typeof key === "string" && key.startsWith("/api/clients") ? key : null);
       toast.success(`Se agrego el nuevo cliente: ${data.name}`);
     } catch (error) {
-      toast.error("No se pudo crear el cliente");
+      toast.error(`No se pudo crear el cliente: ${data.name}`);
     } finally {
       reset();
     }

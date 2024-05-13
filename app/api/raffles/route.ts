@@ -7,9 +7,7 @@ export const GET = async (request: NextRequest) => {
     orderBy: {
       playDate: "asc",
     },
-    include: {
-      tickets: true,
-    }
+
   });
 
   if (!raffles) return NextResponse.json({ raffles: [] });
@@ -45,3 +43,4 @@ export const POST = async (request: NextRequest) => {
     console.log(error);
   }
 };
+

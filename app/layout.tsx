@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="es" data-theme="forest" suppressHydrationWarning>
       <body className={cx(sfPro.variable, inter.variable)}>
         <Toaster position="top-center" />
-        <Suspense fallback="...">
+        <Suspense fallback={<span className="loading loading-bars loading-lg"></span>}>
           <Nav />
         </Suspense>
         <main className="flex flex-col items-center justify-start w-full min-h-screen py-20 ">

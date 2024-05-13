@@ -84,7 +84,7 @@ model Raffle {
 
 model Ticket {
   id       String   @id @default(cuid())
-  number   String
+  number   String 
   raffleId String
   raffle   Raffle   @relation(fields: [raffleId], references: [id])
   clientId String?

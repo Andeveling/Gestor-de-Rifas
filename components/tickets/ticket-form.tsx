@@ -29,13 +29,13 @@ export const TicketFrom = ({ setShowModal }: { setShowModal: Dispatch<SetStateAc
   const onSubmit: SubmitHandler<TCreateTicket> = async (data) => {
     setShowModal(false);
     try {
-      await createTicket(data).then((res) => console.log(res));
-      // console.log(data)
-      mutate((key: string) => (typeof key === "string" && key.startsWith("/api/raffles") ? key : null));
-
+      const newTicket = await createTicket(data);
+      if(!newTicket) throw new Error(`No se pudo crear la boleta: ${data.number}`);
       toast.success(`Se agrego nueva boleta: # ${data.number}`);
+      mutate((key: string) => (typeof key === "string" && key.startsWith("/api/raffles") ? key : null));
+    
     } catch (error) {
-      toast.error("No se pudo crear la boleta");
+      toast.error(`No se pudo crear la boleta: ${data.number} verifica los datos`);
     } finally {
       reset();
     }
