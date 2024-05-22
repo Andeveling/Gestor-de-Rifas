@@ -12,3 +12,10 @@ export type StateRaffle = {
   message?: string | null;
 };
 
+export type StateTicket = {
+  errors?: {
+    number?: string[];
+    raffle?: string[];
+  };
+  message?: string | null;
+}

@@ -28,21 +28,6 @@ export const RafflesEditFrom = () => {
 
       <form action={formAction} className="w-full max-w-xs mx-auto">
         <input type="text"  value={params.id} className="hidden" {...register("id")} />
-
-        <div className="border btn btn-info form-control rounded-xl">
-          <label className="space-x-3 cursor-pointer label">
-            <span className="text-xl label-text">Activar o Desactivar</span>
-            <input
-              type="checkbox"
-              defaultChecked={true}
-              className="checkbox-primary checkbox checkbox-lg"
-              {...register("isActive")}
-            />
-          </label>
-        </div>
-
-        <div className="divider" />
-
         <label className="w-full max-w-xs form-control" htmlFor="name">
           <div className="label">
             <span className="label-text">Nombre </span>

@@ -1,0 +1,84 @@
+Algoritmo: Comprar camiseta Koaj
+	
+Entrada:
+	- Dinero del cliente
+	
+Salida:
+	- Camiseta Koaj negra, talla M
+	- Cambio (si aplica)
+		
+	Variables:
+	- camiseta: Almacena la información de la camiseta (marca, color, talla)
+	- talla: Almacena la talla de la camiseta elegida por el cliente
+	- color: Almacena el color de la camiseta elegida por el cliente
+	- marca: Almacena la marca de la camiseta elegida por el cliente
+	- precio: Almacena el precio de la camiseta
+	- pago: Almacena el monto pagado por el cliente
+	- cambio: Almacena el dinero que se le debe devolver al cliente
+		
+		Inicio
+		
+	Mostrar mensaje: "Bienvenido a la tienda Koaj"
+		
+	Preguntar al cliente: "¿Qué desea comprar?"
+		
+	Leer respuesta del cliente: respuesta
+		
+		Si respuesta contiene "camiseta"
+			
+		Preguntar al cliente: "¿De qué color la desea?"
+			
+		Leer respuesta del cliente: color
+			
+			Si color es "negro"
+				
+			Preguntar al cliente: "¿De qué talla la desea?"
+				
+			Leer respuesta del cliente: talla
+				
+				Si talla es "M"
+					
+					camiseta <- Camiseta(marca="Koaj", color="negro", talla="M")
+					precio <- ConsultarPrecio(camiseta)
+					
+				Mostrar mensaje: "La camiseta Koaj negra, talla M tiene un precio de $" & precio
+					
+				Preguntar al cliente: "¿Cuánto dinero tiene?"
+					
+				Leer respuesta del cliente: pago
+					
+					Si pago >= precio
+						
+						Calcular cambio <- pago - precio
+						
+						Entregar camiseta al cliente
+						
+						Entregar cambio al cliente
+						
+					Mostrar mensaje: "Gracias por su compra!"
+						
+						Sino
+							
+						Mostrar mensaje: "Lo siento, no tiene suficiente dinero para comprar la camiseta."
+							
+							Fin Si
+							
+							Sino
+								
+							Mostrar mensaje: "Lo siento, no tenemos camisetas negras en talla M en este momento."
+								
+								Fin Si
+								
+								Sino
+									
+								Mostrar mensaje: "Lo siento, no tenemos camisetas de ese color en este momento."
+									
+									Fin Si
+									
+									Sino
+										
+									Mostrar mensaje: "Lo siento, no vendemos ese tipo de producto."
+										
+										Fin Si
+										
+										Fin Algoritmo

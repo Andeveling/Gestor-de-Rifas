@@ -32,7 +32,7 @@ export default function ClientsPage({
   
   return (
     <section className="flex flex-col w-full gap-2 px-4">
-      <ClientsModal />
+      {/* <ClientsModal /> */}
       <div className="justify-between navbar bg-base-100">
         <div className="flex flex-col justify-start text-left">
           <div>

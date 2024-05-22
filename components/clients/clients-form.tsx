@@ -1,5 +1,4 @@
 "use client";
-import { createClient } from "@/services/clients.service";
 import { CreateClientSchema, TCreateClient } from "@/types/client.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
@@ -22,8 +21,8 @@ export const ClientsForm = ({ setShowModal }: { setShowModal: Dispatch<SetStateA
   const onSubmit: SubmitHandler<TCreateClient> = async (data) => {
     setShowModal(false);
     try {
-      const newClient = await createClient(data);
-      if (!newClient) throw new Error(`No se pudo crear el cliente: ${data.name}`);
+      // const newClient = await createClient(data);
+      // if (!newClient) throw new Error(`No se pudo crear el cliente: ${data.name}`);
       mutate((key:string)=> typeof key === "string" && key.startsWith("/api/clients") ? key : null);
       toast.success(`Se agrego el nuevo cliente: ${data.name}`);
     } catch (error) {

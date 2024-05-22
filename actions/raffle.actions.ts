@@ -1,9 +1,11 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { CreateRaffleSchema, DeleteRaffleSchema, UpdateRaffleSchema } from "@/types/raffles.types";
+import { CreateTicketSchema } from "@/types/tickets.types";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { StateRaffle } from "./actions";
+import { StateRaffle, StateTicket } from "./actions";
+import { error } from "console";
 
 export async function fetchRafflesWithOutTickets() {
   noStore();
@@ -99,15 +101,13 @@ export async function createRaffle(prevState: StateRaffle, formData: FormData) {
     });
   } catch (error) {
     throw new Error(`Error al crear rifa ${error}`);
-  } finally {
-    revalidatePath("/raffles");
-    redirect("/raffles");
   }
+  revalidatePath("/raffles");
+  redirect("/raffles");
 }
 
 export async function updateRaffle(prevState: StateRaffle, formData: FormData) {
   const data = Object.fromEntries(formData.entries());
-
   const validatedFields = UpdateRaffleSchema.safeParse(data);
   if (!validatedFields.success) {
     return {
@@ -117,25 +117,34 @@ export async function updateRaffle(prevState: StateRaffle, formData: FormData) {
     };
   }
 
-  const { id, name, description, playDate, priceForTicket } = UpdateRaffleSchema.parse(data);
+  const { id, name, description, playDate, priceForTicket, isActive } = UpdateRaffleSchema.parse(data);
   const date = new Date(playDate);
   const price = parseFloat(priceForTicket);
+
+  let updateData = {};
+
+  if (name) updateData = { ...updateData, name: data.name };
+  if (description) updateData = { ...updateData, description: data.description };
+  if (playDate) updateData = { ...updateData, playDate: date };
+  if (priceForTicket) updateData = { ...updateData, priceForTicket: price };
+  if (isActive) updateData = { ...updateData, isActive: data.isActive };
+  if (Object.keys(updateData).length === 0) {
+    return {
+      ...prevState,
+      message: `No se detectaron cambios`,
+    };
+  }
+
   try {
     await prisma.raffle.update({
       where: { id },
-      data: {
-        name,
-        description,
-        playDate: date,
-        priceForTicket: price,
-      },
+      data: updateData,
     });
   } catch (error) {
     throw new Error(`Error al crear rifa ${error}`);
-  } finally {
-    revalidatePath("/raffles");
-    redirect("/raffles");
   }
+  revalidatePath("/raffles");
+  redirect("/raffles");
 }
 export async function deleteRaffle(formData: FormData) {
   const data = Object.fromEntries(formData.entries());
@@ -151,4 +160,42 @@ export async function deleteRaffle(formData: FormData) {
     revalidatePath("/raffles");
     redirect("/raffles");
   }
+}
+
+export async function createTicket(prevState: StateTicket, formData: FormData) {
+  const data = Object.fromEntries(formData.entries());
+  const validatedFields = CreateTicketSchema.safeParse(data);
+  if (!validatedFields.success) {
+    return {
+      ...prevState,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: `Error al crear ticket`,
+    };
+  }
+
+  const { raffle, number } = CreateTicketSchema.parse(data);
+
+  try {
+    const ticket = await prisma.ticket.findFirst({ where: { number, raffle: { id: raffle } } });
+    if (ticket) {
+      return {
+        ...prevState,
+        message: `La boleta ${number} ya existe`,
+        errors: {
+          number: [`La boleta ${number} ya existe`],
+        },
+      };
+    }
+    await prisma.ticket.create({
+      data: {
+        number,
+        raffle: { connect: { id: raffle } },
+      },
+    });
+  } catch (error) {
+    throw new Error(`Error al crear ticket ${error}`);
+  }
+
+  revalidatePath(`/raffles/${raffle}`);
+  redirect(`/raffles/${raffle}`);
 }

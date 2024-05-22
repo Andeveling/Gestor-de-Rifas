@@ -1,8 +1,7 @@
 "use client";
 import { StateRaffle } from "@/actions/actions";
 import { createRaffle } from "@/actions/raffle.actions";
-import { CreateRaffleSchema, TCreateRaffle } from "@/types/raffles.types";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { TCreateRaffle } from "@/types/raffles.types";
 import clsx from "clsx";
 import Link from "next/link";
 import { useFormState } from "react-dom";
@@ -18,11 +17,8 @@ export const RafflesCreateFrom = () => {
   const [state, formAction] = useFormState<StateRaffle, FormData>(createRaffle, initialState);
   const {
     register,
-  } = useForm<TCreateRaffle>({
-    resolver: zodResolver(CreateRaffleSchema),
-    mode: "onChange",
-  });
-
+  } = useForm<TCreateRaffle>();
+ 
 
   return (
     <div className="w-full py-8">

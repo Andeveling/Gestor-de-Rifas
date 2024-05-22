@@ -2,7 +2,6 @@
 import clsx from "clsx";
 import { useFormStatus } from "react-dom";
 
-
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
@@ -18,7 +17,7 @@ export const SubmitButton = ({ children, className, ...rest }: ButtonProps & { c
       aria-disabled={pending}
       disabled={pending}
     >
-      {children}
+      {pending ? <span className="loading loading-spinner"></span> : children}
     </button>
   );
 };
