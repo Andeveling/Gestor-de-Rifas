@@ -79,13 +79,24 @@ model Raffle {
 }
 
 model Ticket {
-  id       String   @id @default(cuid())
+  id       String    @id @default(cuid())
   number   String
   raffleId String
   clientId String?
-  status   String   @default("FREE")
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-  client   Client?  @relation(fields: [clientId], references: [id])
-  raffle   Raffle   @relation(fields: [raffleId], references: [id])
+  status   String    @default("FREE")
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
+  payments Payment[]
+  raffle   Raffle    @relation(fields: [raffleId], references: [id])
+  client   Client?   @relation(fields: [clientId], references: [id])
 }
+
+model Payment {
+  id       String @id @default(cuid())
+  mount    Int
+  ticketId String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+}
+// Status Tickets
+// FREE
+// SOLD

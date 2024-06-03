@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { RaffleSchema } from "./raffles.types";
 import { ClientSchema } from "./client.types";
 
 export enum TicketStatus {
@@ -27,6 +26,17 @@ export const TicketSchema = z.object({
   status: z
     .enum([TicketStatus.FREE, TicketStatus.PENDING, TicketStatus.PAID, TicketStatus.PARTIALLY_PAID])
     .default(TicketStatus.FREE),
+});
+
+
+export const SellTicketSchema = z.object({
+  clientCC: z
+    .string()
+    .regex(/^[0-9]*$/)
+    .min(6),
+  ticketId: z.string(),
+  raffleId: z.string(),
+  payment: z.string().refine(val=> parseInt(val) > 0, {message: "El monto debe ser mayor a 0"}),
 });
 
 export const CreateTicketSchema = TicketSchema.pick({ number: true, raffle: true });

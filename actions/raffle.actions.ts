@@ -1,10 +1,10 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { CreateRaffleSchema, DeleteRaffleSchema, UpdateRaffleSchema } from "@/types/raffles.types";
-import { CreateTicketSchema } from "@/types/tickets.types";
+import { CreateTicketSchema, SellTicketSchema } from "@/types/tickets.types";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { StateRaffle, StateTicket } from "./actions";
+import { SellTicketState, StateRaffle, StateTicket } from "./actions";
 
 export async function fetchRafflesWithOutTickets() {
   noStore();
@@ -200,7 +200,87 @@ export async function createTicket(prevState: StateTicket, formData: FormData) {
 }
 
 
-export async function sellTicket(formData: FormData) { 
-  const data = Object.fromEntries(formData.entries());
-  console.log(data);
+
+export async function sellTicket(prevState: SellTicketState, formData: FormData) {
+  const data = Object.fromEntries(Array.from(formData.entries()).map(([key, value]) => [key, value.toString()]));
+ 
+  const validatedFields = SellTicketSchema.safeParse(data);
+  const { clientCC, ticketId, payment } = SellTicketSchema.parse(data);
+
+ 
+  if (!validatedFields.success) {
+    return {
+      ...prevState,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: `Error al crear ticket`,
+    };
+  }
+  if(!clientCC) return {
+    ...prevState,
+    errors: {
+      clientCC: ["El cliente es requerido"]
+    }
+  }
+
+
+  try {
+    let client = await prisma.client.findUnique({ where: { cc: clientCC } });
+
+    // Si el cliente no existe, retorna un error
+    if (!client) {
+      return {
+        ...prevState,
+        errors: {
+          clientCC: ["El cliente no existe"],
+        },
+      };
+    }
+
+    // Verifica si el ticket existe y está libre
+    let ticket = await prisma.ticket.findUnique({
+      where: { id: ticketId },
+    });
+
+    if (!ticket || ticket.status !== "FREE") {
+      return {
+        ...prevState,
+        errors: {
+          ticketId: ["El ticket no existe o no está disponible"],
+        },
+      };
+    }
+
+    await prisma.$transaction(async (prisma) => {
+      await prisma.ticket.update({
+        where: { id: ticketId },
+        data: {
+          clientId: client.id,
+          status: "SOLD",
+        }
+      })
+
+      await prisma.payment.create({
+        data: {
+          mount: parseInt(payment),
+          ticketId: ticketId,
+        },
+      });
+    })
+
+    revalidatePath(`/raffles/${ticket.raffleId}`);
+    return {
+      ...prevState,
+      message: `La boleta ${ticket.number} ha sido vendida a ${client.name}`,
+    }
+
+  } catch (error) {
+    console.error("Error al vender el ticket:", error);
+    return {
+      ...prevState,
+      errors: {
+        general: ["Ocurrió un error al vender el ticket"],
+      },
+    };
+  }
+
 }

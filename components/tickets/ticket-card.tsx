@@ -4,6 +4,8 @@ import clsx from "clsx";
 import { Ticket } from "@prisma/client";
 import { useDialog } from "@/lib/hooks/use-dialog";
 import { SellTicketForm } from "./sell-ticket-form";
+import { X } from "lucide-react";
+
 
 export const TicketCard = ({
   accordionName,
@@ -40,9 +42,12 @@ export const TicketCard = ({
           <dialog ref={dialogRef} className="modal">
             <div className="modal-box">
               <form method="dialog">
-                <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2" onClick={onClose}>x</button>
+                  
+                <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2" onClick={onClose}>
+                  <X />
+                </button>
               </form>
-              <h3 className="text-xl font-bold text-center">Vender Boleta</h3>
+              <h3 className="text-2xl font-bold text-center">Vender Boleta</h3>
               <SellTicketForm ticket={ticket} />
             </div>
           </dialog>

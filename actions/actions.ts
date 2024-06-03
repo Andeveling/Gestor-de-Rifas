@@ -1,5 +1,3 @@
-
-
 export type StateRaffle = {
   errors?: {
     id?: string[];
@@ -18,4 +16,12 @@ export type StateTicket = {
     raffle?: string[];
   };
   message?: string | null;
-}
+};
+
+export type SellTicketState = {
+  errors?: {
+    clientCC?: string[];
+    payment?: string[]
+  };
+  message?: string | null;
+};
