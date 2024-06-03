@@ -1,10 +1,10 @@
 import { CreateClientSchema, DeleteClientSchema, TCreateClient, UpdateClientSchema } from "@/types/client.types";
-import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+
 
 const MAX_RESULTS = 8;
 
-const prisma = new PrismaClient();
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const query = params.get("query") as string;
