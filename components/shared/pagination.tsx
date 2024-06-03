@@ -13,18 +13,21 @@ export function Pagination({ totalPages }: { readonly totalPages: number }) {
   const currentPage = parseInt(searchParams.get("page") ?? "1");
   const allPages = generatePagination(currentPage, totalPages);
 
+
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNumber.toString());
     return `${pathName}?${params.toString()}`;
   };
 
+  
+
   return (
     <div className="join">
       <div className="inline-flex">
         <PaginationArrow direction="left" href={createPageURL(currentPage - 1)} isDisabled={currentPage <= 1} />
 
-        {allPages.map((page, index) => {
+        {allPages?.map((page, index) => {
           let position: "first" | "last" | "single" | "middle" | undefined;
 
           if (index === 0) position = "first";

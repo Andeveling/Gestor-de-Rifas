@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import ms from "ms";
+import { TicketStatus } from "@/types/tickets.types";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -10,24 +11,6 @@ export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
   return `${ms(Date.now() - new Date(timestamp).getTime())}${timeOnly ? "" : " ago"}`;
 };
 
-export async function fetcher<JSON = any>(input: RequestInfo, init?: RequestInit): Promise<JSON> {
-  const res = await fetch(input, init);
-
-  if (!res.ok) {
-    const json = await res.json();
-    if (json.error) {
-      const error = new Error(json.error) as Error & {
-        status: number;
-      };
-      error.status = res.status;
-      throw error;
-    } else {
-      throw new Error("An unexpected error occurred");
-    }
-  }
-
-  return res.json();
-}
 
 export function nFormatter(num: number, digits?: number) {
   if (!num) return "0";
@@ -85,3 +68,26 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   // another ellipsis, and the last page.
   return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
 };
+
+export const currencyFormat = (value: number | string) => {
+  if (!value) return 0;
+  const number = parseFloat(value.toString());
+  if (isNaN(number)) return 0;
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+
+  }).format(number);
+}
+
+export const adapterTicketStatus = (status: string) => { 
+  const statusMap: Record<string, string> = {
+    FREE: "Libre",
+    PENDING: "Pendiente",
+    PAID: "Pagada",
+    PARTIALLY_PAID: "Parcialmente pagada",
+  }
+  return statusMap[status];
+}

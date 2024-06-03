@@ -1,4 +1,4 @@
-import { z, ZodType } from "zod"; // Add new import
+import { z } from "zod"; // Add new import
 
 export const ClientSchema = z.object({
   id: z.string(),
@@ -16,7 +16,6 @@ export const ClientSchema = z.object({
   tickets: z.array(z.object({})),
   code: z.string().optional(),
 });
-
 export const CreateClientSchema = ClientSchema.omit({ id: true, tickets: true, code: true });
 export const UpdateClientSchema = ClientSchema.partial({});
 export const DeleteClientSchema = ClientSchema.pick({ id: true });
