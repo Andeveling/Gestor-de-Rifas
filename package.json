@@ -31,7 +31,7 @@
     "next": "canary",
     "next-auth": "^4.22.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react-dom": "19.0.0-rc-9598c41a20-20240603",
     "react-hook-form": "^7.51.3",
     "react-markdown": "^8.0.7",
     "sonner": "^1.4.41",

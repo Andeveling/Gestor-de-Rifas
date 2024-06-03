@@ -5,7 +5,6 @@ import { CreateTicketSchema } from "@/types/tickets.types";
 import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { StateRaffle, StateTicket } from "./actions";
-import { error } from "console";
 
 export async function fetchRafflesWithOutTickets() {
   noStore();
@@ -198,4 +197,10 @@ export async function createTicket(prevState: StateTicket, formData: FormData) {
 
   revalidatePath(`/raffles/${raffle}`);
   redirect(`/raffles/${raffle}`);
+}
+
+
+export async function sellTicket(formData: FormData) { 
+  const data = Object.fromEntries(formData.entries());
+  console.log(data);
 }

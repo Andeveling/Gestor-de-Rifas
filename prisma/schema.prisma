@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,8 +20,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -65,9 +61,9 @@ model Client {
   address   String?
   cellphone String
   code      String?
-  tickets   Ticket[]
   createAt  DateTime @default(now())
   updateAt  DateTime @updatedAt
+  tickets   Ticket[]
 }
 
 model Raffle {
@@ -76,25 +72,20 @@ model Raffle {
   priceForTicket Int
   playDate       DateTime
   description    String?
-  tickets         Ticket[]
   createAt       DateTime @default(now())
   updateAt       DateTime @updatedAt
   isActive       Boolean  @default(true)
+  tickets        Ticket[]
 }
 
 model Ticket {
   id       String   @id @default(cuid())
-  number   String 
+  number   String
   raffleId String
-  raffle   Raffle   @relation(fields: [raffleId], references: [id])
   clientId String?
-  client   Client?  @relation(fields: [clientId], references: [id])
   status   String   @default("FREE")
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
+  client   Client?  @relation(fields: [clientId], references: [id])
+  raffle   Raffle   @relation(fields: [raffleId], references: [id])
 }
-
-// FREE
-// PENDING
-// PAID
-// PARTIALLY_PAID
